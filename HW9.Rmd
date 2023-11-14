@@ -1,0 +1,41 @@
+---
+title: "HW9"
+author: "Kipling Stopa A15851786, Nathan Brodie A15874575, Shrest Venkatraman A15910171"
+date: '2023-03-16'
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+## CONTRIBUTIONS All 3 team members worked on each question together, and helped to format the final RMarkdown Document. Work was done on Zoom collectively with equal contribution from each member.
+
+##Question 1
+``` {r eval=TRUE}
+x = seq(-2,2,.2)
+y = 3*x + 1
+y_b = -1*x/2 + 1
+plot(x,y,"l",col="blue",ylab="X2",xlab="X1")
+lines(x,y_b,col="red")
+
+```
+##a) The Points above the blue line represent the points for which (1 + 3X1 - X2)<0, The points below the blue line represent the points for which  (1+3X1 - X2)>0.
+##b) The Points above the red line represent the points for which (-2 + X1 + 2*X2)<0, The points below the red line represent the points for which  (-2 + X1 + 2*X2)>0.
+
+##Question 2
+``` {r eval = TRUE}
+##This is a circle with radius 2 centered at (-1,2)
+##For some reason, the draw.circle command in R is not working correctly for us so question 2 part a) part b) were done in python, and the graph is included in the next page.
+
+```
+##Question 2 c): If the classes are defined the Red Class and the Blue Class, then (0,0) is in the blue class, (-1,1) is in the red class, and (2,2), (3,8) are in the Blue Class, The red class represents points inside our circle and the blue class represents points outside out circle.
+##Question 2 d): According to slide 29 in the SVM slideshow, we know that the enlarged feature space for our equation for a circle means that X1, X1^2, X2, X2^2 are all terms of the linear decision boundary.
+
+
+##Question 3
+``` {r eval = TRUE}
+
+```
+
