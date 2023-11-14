@@ -1,0 +1,168 @@
+---
+title: "Final Project"
+author: "Shrest Venkatraman (A15910171), Kip Stopa(A15851786), Nathan Brodie(A15874575)"
+date: '2023-03-19'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+##Contributions: As always the group worked together over Zoom and equally contributed to the final project.
+
+``` {r eval}
+library(MASS)
+library("ISLR")
+spam.test <- read.csv("C:/Users/Kip/Downloads/spam-test.txt", header=FALSE)
+spam.train <- read.csv("C:/Users/Kip/Downloads/spam-train.txt", header=FALSE)
+
+#1)
+spam.train.stand = cbind(scale(spam.train[,1:57]),spam.train[,58])
+
+#a)
+cov.stand = cov(spam.train.stand)>0.5
+library('corrplot')
+corrplot(cov.stand[24:40,24:40],method='number')
+##From corrplot, we seek to investigate the high correlation between V28 through V36 
+pairs(spam.train.stand[,28:36])
+
+##b)
+direction.fit = glm(V58~., data = as.data.frame(spam.train.stand))
+summary(direction.fit)
+##All values in the Pr(>|t|) category that have at least one * are said to be 
+##statistically significant.
+n = dim(spam.train)[1]
+pred.direction = rep("Down",n)
+pred.direction[direction.fit$fitted.values > 0.5] = "Up"
+true.direction = spam.train[,58]
+table(pred.direction,true.direction)
+
+n = dim(spam.test)[1]
+predict = predict(direction.fit,spam.test)>0.5
+true.direction2 = spam.test[,58]
+table(predict,true.direction2)
+##Classification errors reported in confusion matrix. We see that the main diagonal
+##shows 1772 correct predictions for down and 982 correct predictions for up, as
+##well as 77 false up predictions, and 236 false down predictions.
+
+##Classification errors reported in confusion matrix. We see that the main diagonal
+##shows 49 correct predictions for down and 618 correct predictions for up, as
+##well as 867 false up predictions, and 0 false down predictions.
+
+#c)
+lda.fit = lda(V58~.,data=as.data.frame(spam.train.stand))
+lda.pred=predict(lda.fit, spam.train)
+lda.class=lda.pred$class
+true_value=spam.train[,58]
+table(lda.class,true_value)
+
+lda.pred=predict(lda.fit, spam.test)
+lda.class=lda.pred$class
+true_value=spam.test[,58]
+table(lda.class,true_value)
+
+##QDA
+qda.fit = qda(V58~.,data=as.data.frame(spam.train.stand))
+qda.pred=predict(qda.fit, spam.train)
+qda.class=qda.pred$class
+true_value=spam.train[,58]
+table(qda.class,true_value)
+
+qda.pred=predict(qda.fit, spam.test)
+qda.class=qda.pred$class
+true_value=spam.test[,58]
+table(qda.class,true_value)
+```
+
+``` {r eval=TRUE}
+#2)
+spam.train.transform = log(spam.train+1)
+#a)
+cov.trans = cov(spam.train.transform)>0.5
+corrplot(cov.trans[40:58,40:58],method='number')
+##From corrplot, we seek to investigate the high correlation between V55 through V57
+pairs(spam.train.transform[,55:57])
+
+#b)
+direction.fit = glm(V58~., data = as.data.frame(spam.train.transform))
+summary(direction.fit)
+##All values in the Pr(>|t|) category that have at least one * are said to be 
+##statistically significant.
+n = dim(spam.train)[1]
+pred.direction = rep("Down",n)
+pred.direction[direction.fit$fitted.values > 0.5] = "Up"
+true.direction = spam.train[,58]
+table(pred.direction,true.direction)
+
+n = dim(spam.test)[1]
+predict = predict(direction.fit,spam.test)>0.5
+true.direction2 = spam.test[,58]
+table(predict,true.direction2)
+##Classification errors reported in confusion matrix. We see that the main diagonal
+##shows 1825 correct predictions for down and 773 correct predictions for up, as
+##well as 24 false up predictions, and 445 false down predictions.
+
+##Classification errors reported in confusion matrix. We see that the main diagonal
+##shows 204 correct predictions for down and 618 correct predictions for up, as
+##well as 712 false up predictions, and 0 false down predictions.
+
+#c)
+lda.fit = lda(V58~.,data=as.data.frame(spam.train.transform))
+lda.pred=predict(lda.fit, spam.train)
+lda.class=lda.pred$class
+true_value=spam.train[,58]
+table(lda.class,true_value)
+
+lda.pred=predict(lda.fit, spam.test)
+lda.class=lda.pred$class
+true_value=spam.test[,58]
+table(lda.class,true_value)
+
+##QDA
+qda.fit = qda(V58~.,data=as.data.frame(spam.train.transform))
+qda.pred=predict(qda.fit, spam.train)
+qda.class=qda.pred$class
+true_value=spam.train[,58]
+table(qda.class,true_value)
+
+qda.pred=predict(qda.fit, spam.test)
+qda.class=qda.pred$class
+true_value=spam.test[,58]
+table(qda.class,true_value)
+```
+
+``` {r eval = TRUE}
+#3)
+spam.train.disc = 1*(spam.train>0)
+#a)
+corrplot(spam.train.disc[1:58,1:58])
+# from our corrplot we see that we have a special interest in the following:
+pairs(spam.train.disc[,c(14,24,46,55,56,57)])
+## Our graphs are all of points 0's and 1's which makes reading the graphs for
+##discretized data more challenging.
+
+#b)
+direction.fit = glm(V58~., data = as.data.frame(spam.train.disc))
+summary(direction.fit)
+##All values in the Pr(>|t|) category that have at least one * are said to be 
+##statistically significant.
+n = dim(spam.train)[1]
+pred.direction = rep("Down",n)
+pred.direction[direction.fit$fitted.values > 0.5] = "Up"
+true.direction = spam.train[,58]
+table(pred.direction,true.direction)
+
+n = dim(spam.test)[1]
+predict = predict(direction.fit,spam.test)>0.5
+true.direction2 = spam.test[,58]
+table(predict,true.direction2)
+##Classification errors reported in confusion matrix. We see that the main diagonal
+##shows 1783 correct predictions for down and 1067 correct predictions for up, as
+##well as 66 false up predictions, and 151 false down predictions.
+
+##Classification errors reported in confusion matrix. We see that the main diagonal
+##shows 855 correct predictions for down and 503 correct predictions for up, as
+##well as 61 false up predictions, and 115 false down predictions.
+
+```
